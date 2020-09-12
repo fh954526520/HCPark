@@ -1,0 +1,508 @@
+<template>
+	<div class="content">
+		<div class="map">
+			<map id="map" class="mapshow" :latitude="latitude"  :markers="markers" :longitude="longitude" :polyline="polyline" scale="15" @labeltap="mytravel" @callouttap="mytravel"></map>
+		</div>
+		<wybButton type="filled" class="mytravel" :radius="['1000px']" color="white" font-size="20" fontcolor="#000000"  icon-path="/static/Images/travel/car.png" width="200rpx" height="60rpx" v-if="userInfo.type==1" @click="gotomytravel()">我的出行</wybButton>
+			<wybButton type="filled" class="mytravel" :radius="['1000px']" color="white" font-size="20" fontcolor="#000000"  icon-path="/static/Images/travel/car.png" width="200rpx" height="60rpx" v-if="userInfo.type==3" @click="gototravel()">我的行程</wybButton>
+		<div class="goto">
+			<div class="gotodetail">
+				<div class="detailone">
+					<i class="icon one"></i>
+					<span>快捷出行</span>
+				</div>
+				<div class="detailone" style="border-left:1px solid #DADADA;border-right:1px solid #DADADA;">
+					<i class="icon two"></i>
+					<span>图文选站</span>
+				</div>
+				<div class="detailone">
+					<i class="icon tre"></i>
+					<span>常用站点</span>
+				</div>
+			</div>
+			<div class="gotoinfo">
+				<div class="addressgo">
+					<span>·</span>
+					<icon class="iconaddressgo"></icon>
+					<div class="go bottom ">
+						<input @focus="gofocus(1)" focus="true" placeholder="请选择出发地址" :value="from" />
+					</div>
+				</div>
+				<div class="addressto">
+					<span>·</span>
+					<icon class="iconaddressto"></icon>
+					<div class="go">
+					<input @focus="gofocus(2)" placeholder="请选择到达地址" :value="to" />
+					</div>
+				</div>
+				<div class="changegoto">
+					<icon @click="changegoto()"></icon>
+				</div>
+				<wybButton type="filled" class="suretravel" :radius="['1000px']" color="#FF9929" font-size="30" width="250rpx" height="60rpx" @click="goToOrderPage">确认行程</wybButton>
+			</div>
+		</div>
+		<div class="rightdiv">
+			<div class="rightdivicon opic">
+			</div>
+			<div class="rightdivicon wpic">
+			</div>
+			<div class="rightdivicon tpic">
+			</div>
+		</div>
+	</div>
+	
+</template>
+
+<script>
+	import polylineData from '../static/jsData/polylines.js'
+	export default {
+		name:"mapIndex",
+		props:{
+			latitude:{
+				type:String,
+				default:""
+			},
+			longitude:{
+				type:String,
+				default:""
+			},
+			date:{
+				type:Array,
+				
+			}
+		},
+		data() {
+			return {
+				polyline:[],
+				markers:[],
+				from:'',
+				to:'',
+				selecttype:1,
+				userInfo:{},
+				lastpointID:-1,
+				fromId:0,
+				toId:0,
+			}
+		},
+		created() { 
+			
+			uni.showToast({
+			    title: '加载中...',
+				icon:'loading'
+			});
+			var _self=this;
+			try {
+			    _self.userInfo = uni.getStorageSync('userInfo');
+			} catch (e) {
+			    console.log(e)
+			}
+			var  temp1=[];
+
+			var  Masternode=[];
+			var  Childnode=[];
+
+			for(let i=0;i<this.date.length;i++)
+				{
+					temp1.push({
+
+						id:parseInt(_self.date[i].p_id),
+						latitude:parseFloat(_self.substrpoint(parseFloat(_self.date[i].latitude))),
+						longitude:parseFloat(_self.substrpoint(parseFloat(_self.date[i].longitude))),
+						label:{
+							content:_self.date[i].p_name,
+							bgColor:"#ffffff",
+							color:"#e74c3c",
+							borderRadius:5,
+							fontSize:14,
+							padding:2
+							},
+						iconPath:"/static/Images/map/point1.png",
+						title:_self.date[i].pname,
+						width:10,
+						height:10,
+					});
+
+					if(_self.date[i].p_type===1){
+						Masternode.push(_self.date[i]);
+					}
+					else{
+						Childnode.push(_self.date[i]);
+					}
+
+				}
+				var Route=new Array(Masternode.lenth);
+				let ponints=[];
+				for(let i=0;i<Masternode.length;i++){
+					ponints.push({
+						latitude:parseFloat(_self.substrpoint(parseFloat(Masternode[i].latitude))),
+						longitude:parseFloat(_self.substrpoint(parseFloat(Masternode[i].longitude))),
+					});
+				}
+				let obj=new Object;
+				obj.points=ponints;
+				obj.color="#FF0000";
+				obj.width=8;
+				_self.polyline.push(obj);
+				this.markers=this.markers.concat(temp1);
+				while(Childnode.length>0){
+					var partition=Childnode[0].p_branch_area;
+					var items=Childnode.filter(item=>item.p_branch_area===partition);
+	
+					let tempitems=[];
+					for(let i=0;i<items.length;i++){
+						let arr=[]
+						if(items[i].next_p_ids!=null){
+							arr=items[i].next_p_ids.split(",")
+							arr=arr.map(Number);
+							}
+						tempitems.push(items[i]);
+						for(let n=0;n<arr.length;n++){
+							let poin=_self.date.find(item=>{
+									 if(item.p_id===arr[n])
+									 return item;
+									});
+						if(poin!=null){
+							tempitems.push(poin);
+							tempitems.push(items[i])
+							}
+						}
+					}
+					items=tempitems;	
+					if(items[items.length-1].next_p_ids!=null){
+						let poin=_self.date.find(item=>{
+								 if(item.p_id===parseInt(items[items.length-1].next_p_ids))
+								 return item;
+								})
+								if(poin!=undefined)
+						items.push(poin);
+					}
+					let obji=new Object;
+					obji.points=[];
+					for(let i=0;i<items.length;i++){
+						obji.points.push({
+							latitude:parseFloat(_self.substrpoint(parseFloat(items[i].latitude))),
+							longitude:parseFloat(_self.substrpoint(parseFloat(items[i].longitude))),
+						})
+					}
+					
+					obji.color="#3498db";
+					obji.width=4;
+				   _self.polyline.push(obji);
+					Childnode=Childnode.filter(items=>items.p_branch_area!==partition);	
+				}
+			
+		},
+		methods: {
+			mytravel(e){
+			    var _self=this;
+				if(this.gotype==1)
+				{
+					this.from=e.markerId;
+				}
+				else if(this.totype==1)
+				{
+					this.to=e.markerId;
+				}
+				let thisClickID=e.target.markerId;
+				let thisponit=this.markers.find(function(item){
+					if(item.id===thisClickID)
+					return item;
+				});
+				if(_self.lastpointID!=-1){
+					let lastpoint=_self.markers.find(function(item){
+					if(item.id===_self.lastpointID)
+					return item;	
+					});
+					lastpoint.label.color="#e74c3c";
+					lastpoint.label.bgColor="#ffffff"
+				}
+				_self.lastpointID=thisponit.id;
+				thisponit.label.bgColor="#4cd137";
+				thisponit.label.color="#f5f6fa";
+				console.log(thisponit);
+				console.log(this.selecttype);
+				if(this.selecttype == 1){
+					this.from = thisponit.label.content;
+					this.fromId = thisponit.id;
+					
+				}else{
+					this.to = thisponit.label.content;
+					this.toId = thisponit.id;
+				}
+				this.selecttype= this.selecttype==1?0:1;
+
+			},
+			getMapData(mapData){
+				this.date = mapData;
+			},
+			gotomytravel(){
+				uni.navigateTo({
+					url:"/pages/travel/mytravel"
+				})
+			},
+			gototravel(){
+				uni.navigateTo({
+					url:"/pages/driver/travel_list"
+				})
+			},
+			changegoto()
+			{
+			},
+			gofocus(type)
+			{
+				if(type==1)
+				{
+					this.selecttype=1;
+				}
+				else
+				{
+					this.selecttype=0;
+				}
+			},
+			goToOrderPage(){
+				var goaddress=this.from;
+				var toaddress=this.to;
+				if(this.from==''||this.to=='')
+				{
+					uni.showToast({
+					    title: '地址请填写完整',
+					    duration: 1000,
+						icon:'none'
+					});
+				}
+				else
+				{
+					if(!this.userInfo.SessionKey){
+						uni.navigateTo({
+							url:"/pages/travel/travelTime?fromName="+this.from+"&fromId="+this.fromId+"&toName="+this.to+"&toId="+this.toId
+						})
+					}
+				}
+			},
+			lngpoint(lng,lat){
+				           let x_pi = 3.14159265358979324 * 3000.0 / 180.0;
+				            let x = lng - 0.0065;
+				            let y = lat - 0.006;
+				            let z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * x_pi);
+				            let theta = Math.atan2(y, x) - 0.000003 * Math.cos(x * x_pi);
+				            let lngs = z * Math.cos(theta);
+				            let lats = z * Math.sin(theta);
+					  return lngs;
+			},
+			latpoint(lng,lat){
+			     let x_pi = 3.14159265358979324 * 3000.0 / 180.0;
+			      let x = lng - 0.0065;
+			      let y = lat - 0.006;
+			      let z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * x_pi);
+			      let theta = Math.atan2(y, x) - 0.000003 * Math.cos(x * x_pi);
+			      let lngs = z * Math.cos(theta);
+			      let lats = z * Math.sin(theta);
+				return lats;
+			},
+			substrpoint(value){
+				return value.toFixed(6);
+			},	
+			testfun:function(){
+				console.log("testfun")
+			}
+		}
+	}
+</script>
+
+<style>
+	.map{
+		height: 100%;
+		width: 100%;
+	}
+	.zidingyi{
+		color: black;
+	}
+	.mytravel{
+		margin-left: 2.5%;
+		position: absolute;
+		bottom: 400rpx;
+		z-index:9999;
+	}
+	.content {
+		flex: 1;
+		/* border: 1px solid red; */
+	}
+	.mapshow{
+		width: 100%;
+		height: 100%;
+	}
+	.goto{
+		height: 350rpx;
+		width: 100%;
+		background-color: rgba(0,0,0,0~1);
+		position: absolute;
+		bottom: 0;
+		z-index:9999;
+	}
+	.gotodetail{
+		width: 95%;
+		height: 20%;
+		margin: 0 auto;
+		background-color: white;
+		border-radius: 2vw;
+	}
+	.detailone{
+		width: 33%;
+		height: 60%;
+		float:left;
+		color: #ADADAD;
+		top: 20%;
+		position: relative;
+		text-align: center;
+	}
+	.detailone span{
+		font-size: 3.5vw;
+	}
+	.icon{
+		width: 25rpx;
+		height: 30rpx;
+		position: absolute;
+		left: 30rpx;
+		top: 10rpx;
+	}
+	.one{
+		background-image: url(../static/Images/travel/quick.png);
+		background-size: 100% 100%;
+		background-repeat:no-repeat;
+	}
+	.two{
+		background-image: url(../static/Images/travel/picword.png);
+		background-size: 100% 100%;
+		background-repeat:no-repeat;
+	}
+	.tre{
+		background-image: url(../static/Images/travel/aways.png);
+		background-size: 100% 100%;
+		background-repeat:no-repeat;
+	}
+	.gotoinfo{
+		width: 95%;
+		margin:0 auto;
+		height: 60%;
+		background-color: white;
+		border-radius: 2vw;
+		margin-top: 20rpx;
+		position: relative;
+	}
+	.suretravel{
+		position: absolute;
+		bottom: -24rpx;
+		left: 35%;
+	}
+	.addressgo{
+		width: 80%;
+		height: 45%;
+		position: relative;
+	}
+	.addressgo span{
+		font-size: 60rpx;
+		position: absolute;
+		left: 8.7vw;
+		top: 5.5vw;
+		color: #D6D6D6;
+	}
+	.addressto span{
+		font-size: 60rpx;
+		position: absolute;
+		left: 8.7vw;
+		bottom: 3.5vw;
+		color: #D6D6D6;
+	}
+	.go{
+		width: 80%;
+		height: 100%;
+		float: right;
+		
+	}
+	.bottom{
+		border-bottom:1px solid #E0E0E0;
+	}
+	.addressgo input{
+		padding-top: 30rpx;
+		font-size: 4vw;
+	}
+	.addressto{
+		width: 80%;
+		height:45%;
+		position: relative;
+	}
+	.addressto input{
+		padding-top: 30rpx;
+		font-size: 4vw;
+	}
+	.iconaddressgo{
+		width: 35rpx;
+		height: 35rpx;
+		display: block;
+		background-image: url(../static/Images/travel/go.png);
+		background-size: 100% 100%;
+		background-repeat:no-repeat;
+		float:left;
+		margin-left: 10%;
+		margin-top: 40rpx;
+	}
+	.iconaddressto{
+		width: 30rpx;
+		height: 35rpx;
+		display: block;
+		background-image: url(../static/Images/travel/to.png);
+		background-size: 100% 100%;
+		background-repeat:no-repeat;
+		float:left;
+		margin-left: 10%;
+		margin-top: 40rpx;
+	}
+	.changegoto{
+		width: 20%;
+		height: 100%;
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+	.changegoto icon{
+		width: 35rpx;
+		height: 35rpx;
+		display: block;
+		background-image: url(../static/Images/travel/change.png);
+		background-size: 100% 100%;
+		background-repeat:no-repeat;
+		margin-left: 20%;
+		margin-top: 50%;
+	}
+	.rightdiv{
+		width: 15%;
+		height: 300rpx;
+		position: absolute;
+		bottom: 380rpx;
+		right: 0;
+		z-index:999;
+	}
+	.rightdivicon{
+		width: 70rpx;
+		height: 70rpx;
+		border-radius: 50%;
+		margin: 0 auto;
+		margin-top: 30rpx;
+		
+	}
+	.opic{
+		background-image: url(../static/Images/travel/ding.png);
+		background-size: 100% 100%;
+		background-repeat:no-repeat;
+	}
+	.wpic{
+		background-image: url(../static/Images/travel/wen.png);
+		background-size: 100% 100%;
+		background-repeat:no-repeat;
+	}
+	.tpic{
+		background-image: url(../static/Images/travel/shoucang.png);
+		background-size: 100% 100%;
+		background-repeat:no-repeat;
+	}
+</style>
