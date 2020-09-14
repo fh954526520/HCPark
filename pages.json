@@ -1,16 +1,41 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/index/index",
+			"path":"pages/payfortips/payfortips",
+			"style":{
+				"navigationBarTitleText":"支付停车费"
+			}
+		},
+		{
+			"path":"pages/anotherpay/anotherpay",
+			"style":{
+				"navigationBarTitleText":"支付详情"
+			}
+		},
+		{
+			"path":"pages/payDetails/paydetails",
+			"style":{
+				"navigationBarTitleText":"支付详情"
+			}
+		},
+		 {
+			"path":"pages/carNumbind/carNumBind",
+			"style":{
+				"navigationBarTitleText":"绑定"
+			}
+		},
+		{
+			"path": "pages/orderList/order",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": "我的订单"
 			}
 		}
+		
 	],
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
+		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#F8F8F8",
+		"navigationBarBackgroundColor": "#4482FF",
 		"backgroundColor": "#F8F8F8"
 	}
 }
