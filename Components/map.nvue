@@ -29,7 +29,6 @@
 		<cover-view class="map_position">
 			<cover-image src="../static/images/map/position.png" style="height: 100%; width: 100%;"></cover-image>
 		</cover-view>
-		
 		<cover-view class="mapBottom">
 			<cover-view class="mapBottom_left">
 				<cover-view class="mapBottom_parkname">王府井百货地下停车场</cover-view>
@@ -129,7 +128,7 @@
 		left: 5%;
 		background-color: #FFFFFF;
 		display: block;
-		
+		z-index:999;
 	}
 	.mapTop cover-image{
 		height: 12px;
@@ -152,8 +151,8 @@
 		position: absolute;
 		top: 150rpx;
 		background-color: #FFFFFF;
-		
 		right: 12px;
+		z-index:999;
 	}
 	.mapLeft_list{
 		width: 100%;
@@ -182,6 +181,7 @@
 		right: 15px;
 		background-color: #FFFFFF;
 		bottom: 390rpx;
+		z-index:999;
 	}
 	.mapBottom{
 		width: 80%;
@@ -191,6 +191,7 @@
 		bottom: 36rpx;
 		background-color: #FFFFFF;
 		border-radius: 8px;
+		z-index:999;
 	}
 	.mapBottom_left{
 		float:left;
@@ -203,6 +204,7 @@
 		width: 24%;
 		height: 103px;
 		margin-left: 5%;
+		z-index:999;
 	}
 	.mapBottom_parkname{
 		font-size: 14px;
