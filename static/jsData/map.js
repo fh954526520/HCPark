@@ -1,0 +1,64 @@
+var marker=[
+	{
+		id:1,
+		latitude:29.556767,
+		longitude:106.463860,
+		iconPath:"/static/images/map/naviget.png",
+		width:25,
+		height:25
+	},
+	{
+		id:2,
+		latitude:29.556823,
+		longitude:106.462685,
+		iconPath:"/static/images/map/park.png",
+		width:25,
+		height:40
+	},
+	{
+		id:3,
+		latitude:29.556641,
+		longitude:106.463737,
+		iconPath:"/static/images/map/park.png",
+		width:25,
+		height:40
+	},
+	{
+		id:4,
+		latitude:29.558522,
+		longitude:106.465319,
+		iconPath:"/static/images/map/park.png",
+		width:25,
+		height:40
+	},
+	{
+		id:5,
+		latitude:29.558927,
+		longitude:106.464295,
+		iconPath:"/static/images/map/park.png",
+		width:25,
+		height:40
+	},
+	{
+		id:6,
+		latitude:29.557677,
+		longitude:106.463066,
+		iconPath:"/static/images/map/park.png",
+		width:25,
+		height:40
+	}
+],
+circles=[
+	{
+		latitude:29.556767,
+		longitude:106.463860,
+		color:'#FF2C6DFF',
+		fillcolor:'#FF2C6DFF',
+		radius:10,
+		strokeWidth:10
+	}
+]
+module.exports = {
+  marker:marker,
+  circles:circles
+}

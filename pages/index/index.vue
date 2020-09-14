@@ -1,17 +1,21 @@
 <template>
-	<view class="content">
-		<image class="logo" src="/static/logo.png"></image>
-		<view class="text-area">
-			<text class="title">{{title}}</text>
-		</view>
+	<view class="con">
+		<mapIndex ref="map" id="map1"  :latitude="latitude" :longitude="longitude"></mapIndex>
+		
 	</view>
 </template>
 
 <script>
+	import mapIndex from '../../Components/map.nvue'
 	export default {
+		components:{
+			mapIndex
+		},
 		data() {
+			
 			return {
-				title: 'Hello World BoShanyu'
+				latitude:29.556767,
+				longitude:106.463860
 			}
 		},
 		onLoad() {
@@ -24,29 +28,18 @@
 </script>
 
 <style>
-	.content {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
+	page{
+		height: 100%;
+		width: 100%;
 	}
-
-	.logo {
-		height: 200rpx;
-		width: 200rpx;
-		margin-top: 200rpx;
-		margin-left: auto;
-		margin-right: auto;
-		margin-bottom: 50rpx;
+	.con{
+		height: 100%;
+		width: 100%;
+		position: relative;
 	}
-
-	.text-area {
-		display: flex;
-		justify-content: center;
+	#map1{
+		height: 100%;
+		width: 100%;
 	}
-
-	.title {
-		font-size: 36rpx;
-		color: #8f8f94;
-	}
+	
 </style>
