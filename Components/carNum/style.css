@@ -1,0 +1,96 @@
+.hover-c {
+    opacity: .5
+}
+
+.body,
+page {
+    height: 100%
+}
+
+.body {
+    overflow: auto
+}
+
+.carinput {
+    margin-top: 74upx;
+    display: flex;
+    flex-direction: column;
+    padding-left: 40upx;
+    padding-right: 40upx
+}
+
+.carinput-title {
+    font-size: 30upx;
+    color: #333333;
+    line-height: 1;
+    margin-bottom: 90upx
+}
+
+.carinput-input {
+    display: flex;
+    justify-content: center
+}
+
+.carinput-input-i {
+    width: 70upx;
+	height: 93upx;
+    border-width: 2upx !important;
+    border-style: solid;
+    border-color: #BCBCBC;
+    font-size: 36upx;
+    color: #333333;
+    line-height: 1;
+    margin-right: 12upx;
+    padding-bottom: 7upx;
+    text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.carinput-input-i:nth-last-child(1) {
+    margin-right: 0
+}
+
+.carinput-input .input-active {
+    border-bottom-width: 2upx !important;
+    border-bottom-style: solid;
+    border-bottom-color: #23CCAB;
+    color: #23CCAB
+}
+
+.carinput-power {
+    height: 90upx;
+    display: flex;
+    justify-content: flex-end
+}
+
+.carinput-power .checkbox-g {
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+
+.carinput-power .checkbox {
+    font-size: 28upx;
+    color: #999999;
+    line-height: 1
+}
+
+.carinput-power .checkbox checkbox {
+    transform: scale(.6) translateY(-2px);
+    margin-right: 0
+}
+
+.card-btn {
+    margin-top: 40upx
+}
+
+.card-btn .btn {
+    width: 88vw;
+    height: 80upx;
+	background-color: #2E92FF;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}

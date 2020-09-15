@@ -12,7 +12,6 @@ page {
 }
 
 .carinput {
-    margin-top: 74upx;
     display: flex;
     flex-direction: column;
     padding-left: 40upx;
@@ -28,7 +27,8 @@ page {
 
 .carinput-input {
     display: flex;
-    justify-content: center
+    justify-content: center;
+	margin-top:10rpx;
 }
 
 .carinput-input-i {
@@ -72,7 +72,6 @@ page {
 }
 
 .carinput-power .checkbox {
-    margin-right: 92upx;
     font-size: 28upx;
     color: #999999;
     line-height: 1

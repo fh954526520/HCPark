@@ -7,21 +7,21 @@
 			<cover-image src="../static/images/map/search.png"></cover-image>
 			<cover-view>您今天想去哪儿</cover-view>
 		</cover-view>
-		<cover-view class="mapLeft">
+		<cover-view class="mapLeft" @click="searchcar">
 			<cover-view class="mapLeft_list">
 				<cover-image src="../static/images/map/car.png"></cover-image>
-				<cover-view>寻车</cover-view>
+				<cover-view >寻车</cover-view>
 			</cover-view>
-			<cover-view class="mapLeft_list">
+			<cover-view class="mapLeft_list" @click="payfortip">
 				<cover-image src="../static/images/map/pay.png" style="width: 19.5px; height: 20.5px; margin-left: 12px;"></cover-image>
-				<cover-view>缴费</cover-view>
+				<cover-view @click="payfortip">缴费</cover-view>
 			</cover-view>
-			<cover-view class="mapLeft_list">
+			<cover-view class="mapLeft_list" @click="order">
 				<cover-image src="../static/images/map/order.png" style="width: 19px; height: 22px; margin-left: 13px;
 "></cover-image>
 				<cover-view>订单</cover-view>
 			</cover-view>
-			<cover-view class="mapLeft_list">
+			<cover-view class="mapLeft_list" @click="bind">
 				<cover-image src="../static/images/map/bind.png" style="width: 22px; height: 17px; margin-left: 11px;"></cover-image>
 				<cover-view>绑定</cover-view>
 			</cover-view>
@@ -103,6 +103,27 @@
 			showpopup(event){
 				console.log(11111111111)
 				this.$refs.popup.show();
+			},
+			searchcar:function(){
+				
+			},
+			payfortip:function(){
+				console.log("寻车");
+				uni.navigateTo({
+					url:'/pages/payfortips/payfortips',
+				});
+			},
+			order:function(){
+				console.log("订单")
+				uni.navigateTo({
+					url:"/pages/orderList/order",
+				});
+			},
+			bind:function(){
+				console.log("绑定");
+				uni.navigateTo({
+					url:"/pages/carNumbind/carNumBind",
+				});
 			}
 		}
 	}
@@ -152,7 +173,7 @@
 		position: absolute;
 		top: 150rpx;
 		background-color: #FFFFFF;
-		
+		z-index:99999;
 		right: 12px;
 	}
 	.mapLeft_list{
@@ -240,6 +261,7 @@
 		font-size: 14px;
 		line-height: 37px;
 		text-align: center;
+		
 	}
 	.mapBottom_right_list{
 		height: 14px;
