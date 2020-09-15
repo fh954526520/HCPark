@@ -6,12 +6,12 @@
 			</view> -->
 			<view class="_flkey-bar-c" @click="SpecialPlate">
 				<view>
-					<image src="../../../../static/image/carnumberBind/转换1.png" style="width: 22rpx;height: 19rpx;"></image>
+					<image src="../../../static/images/carnumberBind/转换1.png" style="width: 22rpx;height: 19rpx;"></image>
 				</view>
 				<view class="_flkey-bar-title">{{title}}</view>
 			</view>
 			<view class="_flkey-bar-r" @click="_keyHide" hover-class="_float-hover-c">
-				<view > <image src="../../../../static/image/carnumberBind/1x.png" style="width: 15rpx;height: 15rpx;" mode=""></image></view>
+				<view > <image src="../../../static/images/carnumberBind/1x.png" style="width: 15rpx;height: 15rpx;" mode=""></image></view>
 				<view class="_flkey-bar-btn">退出</view>
 			</view>
 		</view>

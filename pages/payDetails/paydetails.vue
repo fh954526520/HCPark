@@ -2,10 +2,10 @@
 	<view class="content">
 		<view class="car-info">
 			<view>
-				<image src="../../static/image/paydetails/che4.png" mode="" style="width:60rpx ;height:37rpx;margin-left: 10vw;"></image>
+				<image src="../../static/images/paydetails/che4.png" mode="" style="width:60rpx ;height:37rpx;margin-left: 10vw;"></image>
 			</view>
 			<view>
-				<text style="font-size: 38rpx; margin-left: 20vw;">{{carinfo}}</text>
+				<text style="font-size: 38rpx; margin-left: 20vw;">{{info.carinfo}}</text>
 			</view>
 		</view>
 		<view class="parking-rate">
@@ -13,7 +13,7 @@
 				<text style="font-size: 40rpx;margin-left: 10vw;">停车费:</text>
 			</view>
 			<view>
-				<text style="font-size: 45rpx;color:#FF3300;margin-left: 5vw;">{{parkingFee}}</text>
+				<text style="font-size: 45rpx;color:#FF3300;margin-left: 5vw;">{{info.parkingFee}}</text>
 			</view>
 		</view>
 		<view class="parking-details">
@@ -23,10 +23,10 @@
 					<text>:</text>
 				</view>
 				<view>
-					<text style="margin-left: 5vw; color: #4482FF;">{{Arrears}}元</text>
+					<text style="margin-left: 5vw; color: #4482FF;">{{info.Arrears}}元</text>
 				</view>
 				<view>
-					<image src="../../static/image/paydetails/3340.png" style="width: 32rpx;height: 32rpx; margin-left: 2vw;" mode=""></image>
+					<checkbox v-model="check" :checked="check"></checkbox>
 				</view>
 			</view>
 			<view class="parking-details-row">
@@ -35,7 +35,7 @@
 					<text>:</text>
 				</view>
 				<view style="margin-left: 5vw;">
-					<text>{{Plnumber}}</text>
+					<text>{{info.Plnumber}}</text>
 				</view>
 			</view>
 			<view class="parking-details-row">
@@ -44,10 +44,10 @@
 					<text>:</text>
 				</view>
 				<view style="margin-left: 5vw;">
-					<text>{{Einlassdate}}</text>
+					<text>{{info.Einlassdate}}</text>
 				</view>
 				<view style="margin-left: 2vw;">
-					<text>{{Einlasstimes}}</text>
+					<text>{{info.Einlasstimes}}</text>
 				</view>
 			</view>
 			<view class="parking-details-row">
@@ -56,10 +56,10 @@
 					<text>:</text>
 				</view>
 				<view style="margin-left: 5vw;">
-					<text>{{appearancedate}}</text>
+					<text>{{info.appearancedate}}</text>
 				</view>
 				<view style="margin-left: 2vw;">
-					<text>{{appearancetimes}}</text>
+					<text>{{info.appearancetimes}}</text>
 				</view>
 			</view>
 		</view>
@@ -78,24 +78,32 @@
 	export default{
 		data(){
 			return{
-				carinfo:"渝AMW416",
-				parkingFee:"￥7.00",
-				Arrears:24,
-				Plnumber:"0075",
-				Einlassdate:"2020-05-20",
-				Einlasstimes:"14:11:11",
-				appearancedate:"2020-05-20",
-				appearancetimes:"14:11:11",
+				info:"",
+				check:true
 			}
+		},
+		props:{
+			
 		},
 		methods:{
 			cancle:function(){
 				console.log("点击了取消按钮");
+				uni.navigateTo({
+					url: '../index/index',
+					success: res => {console.log(res)},
+				});
 			},
 			confirm:function(){
 				console.log("点击了确认按钮");
 			}
 			
+		},
+		onLoad(value) {
+			var _self=this;
+			console.log("------------------------------");
+			console.log(value);
+			_self.info=JSON.parse(value.info);
+			console.log(_self.info)
 		},
 		created() {
 			

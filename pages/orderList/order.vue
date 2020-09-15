@@ -15,14 +15,14 @@
 				<view class="items" v-for="(item,index) in 15" :key="index">
 					<view class="items-left">
 						<view style="margin-left: 5vw;display: flex;flex-direction: column;">
-							<text v-bind:style="{color:IFpay ? '#FF3300':''}">{{moeny}}元</text>
-							<text style="font-size: 24rpx;color: #E4E4E4;">{{address}}</text>
+							<text v-bind:style="{color:orderinfo[0].IFpay ? '#FF3300':''}">{{orderinfo[0].moeny}}元</text>
+							<text style="font-size: 24rpx;color: #E4E4E4;">{{orderinfo[0].address}}</text>
 						</view>
 					</view>
 					<view class="items-right">
 						<view>
-							<text>{{date}}</text>
-							<text style="margin-left: 2vw;">{{times}}</text>
+							<text>{{orderinfo[0].date}}</text>
+							<text style="margin-left: 2vw;">{{orderinfo[0].times}}</text>
 						</view>
 					</view>
 				</view>
@@ -33,14 +33,14 @@
 				<view class="items" v-for="(item,index) in 15" :key="index">
 					<view class="items-left">
 						<view style="margin-left: 5vw;display: flex;flex-direction: column;">
-							<text v-bind:style="{color:IFpay ? '#FF3300':''}">{{moeny}}元</text>
-							<text style="font-size: 24rpx;color: #E4E4E4;">{{address}}</text>
+							<text v-bind:style="{color:orderinfo[0].IFpay ? '#FF3300':''}">{{orderinfo[0].moeny}}元</text>
+							<text style="font-size: 24rpx;color: #E4E4E4;">{{orderinfo[0].address}}</text>
 						</view>
 					</view>
 					<view class="items-right">
 						<view>
-							<text>{{date}}</text>
-							<text style="margin-left: 2vw;">{{times}}</text>
+							<text>{{orderinfo[0].date}}</text>
+							<text style="margin-left: 2vw;">{{orderinfo[0].times}}</text>
 						</view>
 					</view>
 				</view>
@@ -55,11 +55,13 @@
 	        return {
 	           allOrder:true,
 			   border:true,
-			   moeny:7,
-			   address:"合川区xx万华路",
-			   IFpay:true,
-			   date:"19-09-03",
-			   times:"15-27-03"
+			  orderinfo:[{moeny:7,
+						  address:"合川区xx万华路",
+						  IFpay:true,
+						  date:"19-09-03",
+						  times:"15-27-03",
+						  },
+			   ]
 	        }
 	    },
 	    methods: {

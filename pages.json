@@ -12,12 +12,7 @@
 				"navigationBarTitleText":"支付停车费"
 			}
 		},
-		{
-			"path":"pages/anotherpay/anotherpay",
-			"style":{
-				"navigationBarTitleText":"支付详情"
-			}
-		},
+	
 		{
 			"path":"pages/payDetails/paydetails",
 			"style":{
