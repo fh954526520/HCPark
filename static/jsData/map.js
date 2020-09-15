@@ -3,9 +3,9 @@ var marker=[
 		id:1,
 		latitude:29.556767,
 		longitude:106.463860,
-		iconPath:"/static/images/map/naviget.png",
-		width:25,
-		height:25
+		iconPath:"/static/images/map/group.png",
+		width:40,
+		height:40
 	},
 	{
 		id:2,
@@ -120,10 +120,10 @@ circles=[
 	{
 		latitude:29.556767,
 		longitude:106.463860,
-		color:'#2C6EFF0F',
-		fillcolor:'#2C6EFF02',
-		radius:2,
-		strokeWidth:50
+		radius: 100,  
+		strokeWidth: 60,
+		color: "rgb(171,193,242)",  
+		fillColor: "rgb(197,215,247)", 
 	}
 ]
 module.exports = {

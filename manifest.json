@@ -65,7 +65,7 @@
         "usingComponents" : true,
         "permission" : {
             "scope.userLocation" : {
-                "desc" : ""
+                "desc" : "小程序导航功能"
             }
         }
     },

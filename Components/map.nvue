@@ -1,7 +1,7 @@
 <template>
 	<div class="content">
-		<div class="map">
-			<map id="map" @tap="shownotModel" :circles="circles" class="mapshow" show-compass="true" show-location="true" :latitude="latitude"  :markers="markers" @markertap="showParkDetail" :longitude="longitude" scale="15" ></map>
+		<div class="map"><!--:circles="circles"-->
+			<map id="map" @tap="shownotModel" @regionchange="changeview" ref="map1" class="mapshow" :circles="circles" show-location="true" :latitude="latitude"  :markers="markers" @markertap="showParkDetail" :longitude="longitude" scale="15" ></map>
 		</div>
 		<cover-view class="mapTop" @click="toSearch()">
 			<cover-image src="../static/images/map/search.png"></cover-image>
@@ -61,7 +61,7 @@
 				<cover-view class="mapbutton_to" @click="showpopup">立即前往</cover-view>
 			</cover-view>
 		</cover-view>
-		<mapPopup ref="popup" class="popup"></mapPopup>
+		<mapPopup ref="popup" class="popup" style="z-index:0"></mapPopup>
 	</div>
 	
 </template>
@@ -97,7 +97,11 @@
 				parkcount:0,
 				currentId:0,
 				isdisplay:1,
-				ismarkertap:1
+				ismarkertap:1,
+				lat:0,
+				long:0,
+				show:false,
+				EARTH_RADIUS:6378.137//地球半径
 			}
 		},
 		created() { 
@@ -108,16 +112,63 @@
 			this.markers = makerData.marker;
 			this.circles = makerData.circles;
 		},
+		onLoad() {
+			
+		},
 		onShow() {
 			
 		},
 		methods: {
+			rad(d){
+			    return d * Math.PI / 180.0;
+			},
+			changeview(){
+				var map = uni.createMapContext('map', this)
+				var _self = this;
+				map.getRegion({
+				   success: function(res){
+				       let lng1 = res.northeast.longitude;
+				       let lat1 = res.northeast.latitude;
+				       let lng2 = res.southwest.longitude;
+				       let lat2 = res.southwest.latitude;
+				
+				       let longitude = lng1 - lng2;
+				       let latitude = lat1 - lat2;
+				       let flag = longitude>latitude?true:false;
+				       let radius = 0;
+				       //计算得到短边，然后再通过*1000转变为m，除2得到半径，*0.8优化显示，让圈圈只占界面的80%
+				       if(flag){
+				           radius= _self.getDistance(lng1,lat1,lng1,lat2)*1000/2*0.8;
+				       }else{
+				           radius= _self.getDistance(lng1,lat1,lng2,lat1)*1000/2*0.8;
+				       }
+					   
+					   _self.circles[0].radius = radius;
+					   _self.circles[0].strokeWidth = radius;
+				   },
+				   fail: (data, code) => {  
+					   console.log('fail' + JSON.stringify(data));  
+				   }  
+				})
+			},
+			getDistance(lng1, lat1, lng2, lat2){ 
+			  var radLat1 = this.rad(lat1);
+			  var radLat2 =  this.rad(lat2);
+			  var a = radLat1 - radLat2;
+			  var b =  this.rad(lng1) -  this.rad(lng2);
+			  var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2)
+			    + Math.cos(radLat1) * Math.cos(radLat2)
+			    * Math.pow(Math.sin(b / 2), 2)));
+			  s = s * this.EARTH_RADIUS;
+			  s = Math.round(s * 10000) / 10000;
+			  return s;//返回数值单位：公里
+			},
 			showpopup(event){
-				this.$refs.popup.show();
+				this.show = true;
+				this.$refs.popup.show(this.lat,this.longitude);
 			},
 			//展示车位详情
 			showParkDetail(e){
-				console.log(new Date().getTime())
 				var data = makerData.markerDetail;
 				var id = e.detail.markerId;
 				this.areaname = data[id-1].name;
@@ -126,6 +177,8 @@
 				this.distance = data[id-1].distance;
 				this.paricetype = data[id-1].type==1?"时":"次";
 				this.price = data[id-1].free;
+				this.lat = data[id-1].latitude;
+				this.long = data[id-1].longitude;
 				if(this.currentId === id){
 					this.animation = 1;
 					this.currentId = 0;
@@ -137,7 +190,7 @@
 					this.animation = 2;  //动画执行
 					this.currentId = id; //获取当前点击得id
 					this.isdisplay = 2;  //是否展示
-					this.ismarkertap = 2; //标记当前的是否是点击了该方法
+					this.ismarkertap = 1; //标记当前的是否是点击了该方法
 				} 
 				
 			},
@@ -160,16 +213,16 @@
 				this.isdisplay= 2;
 			},
 			shownotModel(event){
-				console.log(event)
-				if(this.ismarkertap === 2){
-					this.animation = 1;
-					this.currentId = 0;
-					var timeid = setTimeout(function() {
-						this.isdisplay = 1;
-					},500);
-					clearTimeout(timeid);
-				}
-				this.ismarkertap = 1;
+				//console.log(event)
+				// if(this.ismarkertap === 2){
+				// 	this.animation = 1;
+				// 	this.currentId = 0;
+				// 	var timeid = setTimeout(function() {
+				// 		this.isdisplay = 1;
+				// 	},500);
+				// 	clearTimeout(timeid);
+				// }
+				// this.ismarkertap = 1;
 			}
 		}
 	}
@@ -187,6 +240,7 @@
 	.mapshow{
 		height: 100%;
 		width: 100%;
+		z-index:99;
 	}
 	.mapTop{
 		width: 90%;

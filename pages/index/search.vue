@@ -3,13 +3,13 @@
 		<view class="search_head">
 			<view class="search_head_input">
 				<view class="search_head_input_image left" style="margin-left: 9px;">
-					<image src="../../static/images/map/Forma%201@2x.png" />
+					<image src="../../static/images/map/cancel.png" />
 				</view>
 				<view class="search_head_input_text left">
 					<input class="search_input" :value="inputValue" placeholder="请输入车场名称" @input="getInput" />
 				</view>
 				<view class="search_head_input_image right" style="margin-right: 9px;" @click="clearInput">
-					<image src="../../static/images/map/clear%20button@2x.png" />
+					<image src="../../static/images/map/search1.png" />
 				</view>
 			</view>
 			<view class="searchClick" @click="searchInput">
@@ -132,7 +132,7 @@
 	.search_head_input_image{
 		height: 16px;
 		width: 16px;
-		margin-top: 6.5px;
+		margin-top: 4.5px;
 	}
 	.search_head_input_image image{
 		height: 100%;
