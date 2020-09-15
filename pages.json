@@ -37,6 +37,14 @@
 				"navigationBarTitleText": "我的订单"	
 
 			}
+		},
+		{
+			"path": "pages/index/search",
+			"style": {
+				
+				"navigationBarTitleText": "车场搜索"	
+		
+			}
 		}
 		
 	],

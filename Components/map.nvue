@@ -1,9 +1,9 @@
 <template>
 	<div class="content">
 		<div class="map">
-			<map id="map" :circles="circles" class="mapshow" show-compass="true" show-location="true" :latitude="latitude"  :markers="markers" :longitude="longitude" scale="15" ></map>
+			<map id="map" @tap="shownotModel" :circles="circles" class="mapshow" show-compass="true" show-location="true" :latitude="latitude"  :markers="markers" @markertap="showParkDetail" :longitude="longitude" scale="15" ></map>
 		</div>
-		<cover-view class="mapTop">
+		<cover-view class="mapTop" @click="toSearch()">
 			<cover-image src="../static/images/map/search.png"></cover-image>
 			<cover-view>您今天想去哪儿</cover-view>
 		</cover-view>
@@ -29,19 +29,19 @@
 		<cover-view class="map_position">
 			<cover-image src="../static/images/map/position.png" style="height: 100%; width: 100%;"></cover-image>
 		</cover-view>
-		<cover-view class="mapBottom">
+		<cover-view class="mapBottom" :style="{'animation':animation==1?'myAnimation1 0.5s linear':'myAnimation2 0.5s linear','animation-fill-mode': 'forwards','display':isdisplay===1?'none':'block'}">
 			<cover-view class="mapBottom_left">
-				<cover-view class="mapBottom_parkname">王府井百货地下停车场</cover-view>
+				<cover-view class="mapBottom_parkname">{{areaname}}</cover-view>
 				<cover-view class="mapBottom_parkdetail">
 					<cover-view class="mapBottom_parkprice">
 						<cover-view class="parkprice_name">
-							<cover-view style="float:left; color: #4483FD; font-size: 15px;">5</cover-view><cover-view style="float:left; font-size: 10px;margin-top: 4px;margin-left: 3px;">元/时</cover-view>
+							<cover-view style="float:left; color: #4483FD; font-size: 15px;">{{price}}</cover-view><cover-view style="float:left; font-size: 10px;margin-top: 4px;margin-left: 3px;">元/{{paricetype}}</cover-view>
 						</cover-view>
 						<cover-view style="font-size: 10px;">收费标准</cover-view>
 					</cover-view>
 					<cover-view class="mapBottom_parkcount">
 						<cover-view class="parkprice_name">
-							<cover-view style="float:left; color: #4483FD; font-size: 15px;">10</cover-view><cover-view style="float:left; font-size: 10px;margin-top: 4px;margin-left: 3px;">个</cover-view>
+							<cover-view style="float:left; color: #4483FD; font-size: 15px;">{{parkcount}}</cover-view><cover-view style="float:left; font-size: 10px;margin-top: 4px;margin-left: 3px;">个</cover-view>
 						</cover-view>
 						<cover-view style="font-size: 10px;">空闲车位</cover-view>
 					</cover-view>
@@ -50,11 +50,11 @@
 			<cover-view class="mapBottom_right">
 				<cover-view class="mapBottom_right_list">
 					<cover-image src="../static/images/map/naviget.png" style="margin-left:2px;height: 12.5px; float:left;width: 12.5px;"></cover-image>
-					<cover-view style="float:left;height: 14px;color: #4483FD; margin-left: 6px; line-height: 14px; font-size: 11px;">500米</cover-view>
+					<cover-view style="float:left;height: 14px;color: #4483FD; margin-left: 6px; line-height: 14px; font-size: 11px;">{{distance}}千米</cover-view>
 				</cover-view>
 				<cover-view class="mapBottom_right_list">
 					<cover-image src="../static/images/map/time.png" style="margin-left:2px;height: 12.5px; float:left;width: 12.5px;"></cover-image>
-					<cover-view style="float:left;height: 14px;color: #4483FD; margin-left: 6px; line-height: 14px; font-size: 11px;">2分钟</cover-view>
+					<cover-view style="float:left;height: 14px;color: #4483FD; margin-left: 6px; line-height: 14px; font-size: 11px;">{{freetime}}分钟</cover-view>
 				</cover-view>
 			</cover-view>
 			<cover-view class="mapbutton">
@@ -87,7 +87,17 @@
 		data() {
 			return {
 				markers:[],
-				circles:[]
+				circles:[],
+				animation:1,
+				areaname:"",
+				price:0,
+				paricetype:"次",
+				distance:0,
+				freetime:0,
+				parkcount:0,
+				currentId:0,
+				isdisplay:1,
+				ismarkertap:1
 			}
 		},
 		created() { 
@@ -95,13 +105,71 @@
 			    title: '加载中...',
 				icon:'loading'
 			});
-			this.markers = makerData.marker
-			this.circles = makerData.circles
+			this.markers = makerData.marker;
+			this.circles = makerData.circles;
+		},
+		onShow() {
+			
 		},
 		methods: {
 			showpopup(event){
-				console.log(11111111111)
 				this.$refs.popup.show();
+			},
+			//展示车位详情
+			showParkDetail(e){
+				console.log(new Date().getTime())
+				var data = makerData.markerDetail;
+				var id = e.detail.markerId;
+				this.areaname = data[id-1].name;
+				this.parkcount = data[id-1].parkcount;
+				this.freetime = data[id-1].time;
+				this.distance = data[id-1].distance;
+				this.paricetype = data[id-1].type==1?"时":"次";
+				this.price = data[id-1].free;
+				if(this.currentId === id){
+					this.animation = 1;
+					this.currentId = 0;
+					var timeid = setTimeout(function() {
+						this.isdisplay = 1;
+					},1000);
+					clearTimeout(timeid);
+				}else{
+					this.animation = 2;  //动画执行
+					this.currentId = id; //获取当前点击得id
+					this.isdisplay = 2;  //是否展示
+					this.ismarkertap = 2; //标记当前的是否是点击了该方法
+				} 
+				
+			},
+			toSearch(){
+				uni.navigateTo({
+					url:"/pages/index/search"
+				})
+			},
+			searchId(id){
+				var data = makerData.markerDetail;
+				var id = id-1;
+				console.log(data[id]);
+				this.areaname = data[id].name;
+				this.parkcount = data[id].parkcount;
+				this.freetime = data[id].time;
+				this.distance = data[id].distance;
+				this.paricetype = data[id].type==1?"时":"次";
+				this.price = data[id].free;
+				this.animation = 2;
+				this.isdisplay= 2;
+			},
+			shownotModel(event){
+				console.log(event)
+				if(this.ismarkertap === 2){
+					this.animation = 1;
+					this.currentId = 0;
+					var timeid = setTimeout(function() {
+						this.isdisplay = 1;
+					},500);
+					clearTimeout(timeid);
+				}
+				this.ismarkertap = 1;
 			}
 		}
 	}
@@ -128,7 +196,7 @@
 		left: 5%;
 		background-color: #FFFFFF;
 		display: block;
-		z-index:999;
+		z-index:1000;
 	}
 	.mapTop cover-image{
 		height: 12px;
@@ -145,6 +213,7 @@
 		color: #9CA1B9;
 		font-size: 14px;
 	}
+	
 	.mapLeft{
 		height: 200px;
 		width: 45px;
@@ -152,7 +221,7 @@
 		top: 150rpx;
 		background-color: #FFFFFF;
 		right: 12px;
-		z-index:999;
+		z-index:1000;
 	}
 	.mapLeft_list{
 		width: 100%;
@@ -181,7 +250,7 @@
 		right: 15px;
 		background-color: #FFFFFF;
 		bottom: 390rpx;
-		z-index:999;
+		z-index:1000;
 	}
 	.mapBottom{
 		width: 80%;
@@ -191,7 +260,16 @@
 		bottom: 36rpx;
 		background-color: #FFFFFF;
 		border-radius: 8px;
-		z-index:999;
+		z-index:1000;
+		
+	}
+	@keyframes myAnimation1 {
+	　　0%{transform:translateX(0px);}
+	　　100%{transform:translateX(600px);}
+	}
+	@keyframes myAnimation2 {
+	　　0%{transform:translateX(600px);}
+	　　100%{transform:translateX(0px);}
 	}
 	.mapBottom_left{
 		float:left;
@@ -204,7 +282,7 @@
 		width: 24%;
 		height: 103px;
 		margin-left: 5%;
-		z-index:999;
+		z-index:1000;
 	}
 	.mapBottom_parkname{
 		font-size: 14px;
@@ -246,7 +324,6 @@
 	.mapBottom_right_list{
 		height: 14px;
 		width: 100%;
-		
 		margin-top: 26px;
 	}
 	.popup{

@@ -14,4 +14,13 @@
 
 <style>
 	/*每个页面公共css */
+	.left{
+		float: left;
+	}
+	.right{
+		float: right;
+	}
+	.clearfix{
+		clear: none;
+	}
 </style>

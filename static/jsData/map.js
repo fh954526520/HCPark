@@ -48,17 +48,86 @@ var marker=[
 		height:40
 	}
 ],
+markerDetail=[
+	{
+		id:1,
+		latitude:29.556767,
+		longitude:106.463860,
+		distance:21,
+		time:22,
+		parkcount:7,
+		free:8,
+		name:"王附近地下停车场",
+		type:1
+	},
+	{
+		id:2,
+		latitude:29.556823,
+		longitude:106.462685,
+		distance:18,
+		time:19,
+		parkcount:4,
+		free:4,
+		name:"炫地地下停车场",
+		type:2
+	},
+	{
+		id:3,
+		latitude:29.556641,
+		longitude:106.463737,
+		distance:18,
+		time:11,
+		parkcount:18,
+		free:6,
+		name:"重庆大酒店地下停车场",
+		type:1
+	},
+	{
+		id:4,
+		latitude:29.558522,
+		longitude:106.465319,
+		distance:29,
+		time:45,
+		parkcount:12,
+		free:3,
+		name:"自由康都地下停车场",
+		type:1
+	},
+	{
+		id:5,
+		latitude:29.558927,
+		longitude:106.464295,
+		distance:6,
+		time:21,
+		parkcount:8,
+		free:4,
+		name:"正升地下停车场",
+		type:2
+	},
+	{
+		id:6,
+		latitude:29.557677,
+		longitude:106.463066,
+		distance:9,
+		time:31,
+		parkcount:9,
+		name:"天台地下停车场",
+		free:2,
+		type:1
+	}
+],
 circles=[
 	{
 		latitude:29.556767,
 		longitude:106.463860,
-		color:'#FF2C6DFF',
-		fillcolor:'#FF2C6DFF',
-		radius:10,
-		strokeWidth:10
+		color:'#2C6EFF0F',
+		fillcolor:'#2C6EFF02',
+		radius:2,
+		strokeWidth:50
 	}
 ]
 module.exports = {
   marker:marker,
-  circles:circles
+  circles:circles,
+  markerDetail:markerDetail
 }
