@@ -119,7 +119,7 @@
 		width: 49.75%;
 		height: 100%;
 		float: left;
-		font-size: 3vh;
+		font-size: 41rpx;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -134,7 +134,7 @@
 		width: 49.75%;
 		height: 100%;
 		float: left;
-		font-size: 3vh;
+		font-size: 41rpx;
 		display: flex;
 		justify-content: center;
 		align-items: center;

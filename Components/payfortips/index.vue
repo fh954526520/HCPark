@@ -186,9 +186,9 @@ export default {
 			let that = this
 			let ck = that.checkCar();
 			if (ck.i == -1 && !ck.isempty) {
-				console.log('可以绑定车牌了');
 				console.log(this.carInput);
 				console.log(val);
+				console.log("--------------------")
 				uni.navigateTo({
 					url:"../../pages/payDetails/paydetails?info="+JSON.stringify(val),
 				});

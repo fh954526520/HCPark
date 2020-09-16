@@ -1,9 +1,10 @@
 <template> <!--:style="{'display':isshow?'block':'none','z-index':isshow?1001:1}"-->
-	<cover-view class="content" v-if="isshow" @click="cancel">
+	<cover-view class="content" v-if="isshow">
 		<cover-view class="topsinfo-content" >
 			<cover-view class="header-title">
 				通知提醒
 			</cover-view>
+			<cover-image @click="cancel" src="../static/images/map/search1.png" class="closeimage" style="width: 40rpx;height: 40rpx;"></cover-image>
 			<cover-view class="tips-info">
 				<cover-view>你的爱车停放在{{address}}路段</cover-view>
 				<cover-view style="margin-top: 32rpx;">车位号：{{parkinglotnumber}}</cover-view>
@@ -68,6 +69,7 @@
 		justify-content: center;
 		z-index: 1002;
 		position: relative;
+		
 	}
 	.topsinfo-content{
 		width: 80vw;
@@ -141,6 +143,12 @@
 		align-items: center;
 		text-align: center;
 		line-height: 6vh;
-		
+	}
+	.closeimage{
+		    position: absolute;
+		    top: 24vh;
+		    right: 9vw;
+		    background-color: #ffffff;
+		    border-radius: 50%;
 	}
 </style>
