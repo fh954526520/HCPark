@@ -3,7 +3,7 @@
 		<cover-view class="popup-cotent">
 			<cover-view class="popup">
 				<cover-view class="popup-addr"style="margin-top: 84px;">
-					是否立即前往万禾街路段 
+					是否立即前往{{parkname}} 
 				</cover-view>
 				<cover-view class="popup-addr" style="margin-top: 4px;">请选择</cover-view>
 				<cover-view class="popup-button">
@@ -30,37 +30,40 @@
 				isshow:false,
 				lat:0,
 				long:0,
+				parkname:"万和路段"
 			}
 		},
 		created() {
 			
 		},
 		methods:{
-			show(lat,long){
+			show(lat,long,name){
 				this.isshow = true;
 				this.lat = lat;
 				this.long = long;
+				this.parkname = name;
 			},
 			cancel(){
 				this.isshow = false;
-			
 			},
 			toothermap(){
 				var _self=this;
-				uni.getLocation({
-				    type: 'gcj02', //返回可以用于uni.openLocation的经纬度
-				    success: function (res) {
-				        const latitude = res.latitude;
-				        const longitude = res.longitude;
-				        uni.openLocation({
-				            latitude: latitude,
-				            longitude: longitude,
-				            success: function () {
-				                console.log('success');
-				            }
-				        });
+				uni.openLocation({
+				    latitude:Number(_self.lat),
+				    longitude: Number(_self.long),
+					address:_self.parkname,
+				    success: function () {
+				        console.log('success');
 				    }
 				});
+				this.isshow = false;
+				// uni.getLocation({
+				//     type: 'gcj02', //返回可以用于uni.openLocation的经纬度
+				//     success: function (res) {
+				// 		console.log(res)
+				        
+				//     }
+				// });
 			}
 			
 		}

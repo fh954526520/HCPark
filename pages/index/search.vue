@@ -94,13 +94,32 @@
 				this.parklist = [];
 			},
 			getDetail(id){
-				let pages = getCurrentPages();  //获取所有页面栈实例列表
-				let nowPage = pages[ pages.length - 1];  //当前页页面实例
-				let prevPage = pages[ pages.length - 2 ];  //上一页页面实例
-				prevPage.$vm.id = id;   //修改上一页data里面的id参数值为id
-				uni.navigateBack({
-					delta:1
-				})
+				// let pages = getCurrentPages();  //获取所有页面栈实例列表
+				// let nowPage = pages[ pages.length - 1];  //当前页页面实例
+				// let prevPage = pages[ pages.length - 2 ];  //上一页页面实例
+				// prevPage.$vm.id = id;   //修改上一页data里面的id参数值为id
+				// uni.navigateBack({
+				// 	delta:1
+				// })
+				var _self = this;
+				if(_self.parklist.length > 0){
+					console.log(_self.parklist.length);
+					for(var i=0; i<_self.parklist.length;i++){
+						
+						if(_self.parklist[i].id == id){
+							uni.openLocation({
+							    latitude:Number(_self.parklist[i].latitude),
+							    longitude: Number(_self.parklist[i].longitude),
+								address:_self.parklist[i].name,
+							    success: function () {
+							        console.log('success');
+							    }
+							});
+							break;
+						}
+						console.log(_self.parklist[i])
+					}
+				}
 			}
 		}
 	}

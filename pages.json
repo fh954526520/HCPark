@@ -36,17 +36,16 @@
 		{
 			"path": "pages/index/search",
 			"style": {
-				
 				"navigationBarTitleText": "车场搜索"	
-		
 			}
 		}
 		
 	],
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
+		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "伯山羽科技",
-		"navigationBarBackgroundColor": "#F8F8F8",
+		"navigationBarBackgroundColor": "#4482FF",
+		"renderingMode": "seperated",
 		"backgroundColor": "#F8F8F8"
 	}
 }

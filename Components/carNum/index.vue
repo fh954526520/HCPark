@@ -105,6 +105,7 @@ export default {
 					that.carIndex = -2;
 					console.log('非新能源车输入完毕');
 					for(let i=0;i<that.carInput.length;i++){
+						if(that.carInput[i].val != undefined)
 						that.platNumber+=that.carInput[i].val;
 					}
 				}
@@ -115,6 +116,7 @@ export default {
 				that.carIndex = -3;
 				console.log('新能源车输入完毕');
 				for(let i=0;i<that.carInput.length;i++){
+					if(that.carInput[i].val != undefined)
 					that.platNumber+=that.carInput[i].val;
 				}
 			}

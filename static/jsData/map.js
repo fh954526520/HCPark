@@ -122,8 +122,8 @@ circles=[
 		longitude:106.463860,
 		radius: 100,  
 		strokeWidth: 60,
-		color: "rgb(171,193,242)",  
-		fillColor: "rgb(197,215,247)", 
+		color: "#4482FF48",  
+		fillColor: "#4482FF88", 
 	}
 ]
 module.exports = {

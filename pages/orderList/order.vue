@@ -3,11 +3,11 @@
     <view class="content">
 		<view class="header-content">
 			<view class="left-nav" @click="orderChange(1)">
-					<text v-bind:class="{'border-show': border ? true:false}" style="width: auto;height: 100%;display: flex;justify-content: center;align-items: center;">所有订单</text>
+					<text v-bind:class="{'border-show': border ? true:false}" style="width: auto;height: 100%;display: flex;justify-content: center;align-items: center; font-size: 15px;">所有订单</text>
 			</view>
 			<view class="middle-nav"></view>
 			<view class="right-nav" @click="orderChange(2)">
-					<text v-bind:class="{'border-show': border ? false:true}" style="width: auto; height: 100%;	display: flex;justify-content: center;align-items: center;">待支付</text>
+					<text v-bind:class="{'border-show': border ? false:true}" style="width: auto; height: 100%;	display: flex;justify-content: center;align-items: center; font-size: 15px;">待支付</text>
 			</view>
 		</view>
 		<view class="all-orders" v-if="allOrder">

@@ -25,19 +25,47 @@
 				carIndex:-1,
 				carInput:'',
 				info:{},
+				name:"",
+				lat:0,
+				long:0,
+				fromtype:1  //区分是哪个页面跳转过来得  1是支付功能  2是更换车牌功能
 			}
+		},
+		onLoad(option){
+			if(option.platenumber != 'null'){
+				this.fromtype = 2;
+				this.name = option.name;
+				this.lat = option.lat;
+				this.long = option.long;
+				this.$children[0].getdefaultcarInput(option.platenumber);
+			}else{
+				this.fromtype = 1;
+				this.$children[0].getdefaultcarInput('');
+			}
+			
+			
 		},
 		methods:{
 			confirm:function(){
-				console.log("点击了确定按钮");
 				var _self=this;
-				_self.$children[0].toBind(_self.info);
+				if(_self.fromtype == 1 ){
+					_self.$children[0].toBind(_self.info);
+				}else{
+					uni.openLocation({
+					    latitude:Number(_self.lat),
+					    longitude: Number(_self.long),
+						address:_self.name,
+					    success: function () {
+					        console.log('success');
+					    }
+					});
+				}
 			},
 			cancel:function(){
 				console.log("点击了取消按钮");
-			uni.navigateTo({
-				url:"../index/index",
-			})
+				uni.navigateBack({
+					delta:1
+				});
 			},
 			getCarInput:function(value){
 				var _self=this;
@@ -50,6 +78,7 @@
 				var _self=this;
 				let tipsmessage="";
 				for(let i=0;i<_self.carInput.length;i++){
+					if(_self.carInput[i].val != undefined)
 					tipsmessage+=_self.carInput[i].val;
 				}
 				_self.info.carinfo=tipsmessage;
@@ -65,10 +94,6 @@
 		},
 		components:{
 			Unumber,
-		},
-		onLoad(value) {
-			console.log(value);
-			this.$children[0].getdefaultcarInput(value.platenumber);
 		}
 	}
 </script>
