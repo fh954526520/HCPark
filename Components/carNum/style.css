@@ -53,7 +53,7 @@ page {
 }
 
 .carinput-input .input-active {
-    border-bottom-width: 2upx !important;
+    border-bottom-width: 5rpx !important;
     border-bottom-style: solid;
     border-bottom-color: #23CCAB;
     color: #23CCAB
