@@ -8,20 +8,20 @@
 			<cover-view>您今天想去哪儿</cover-view>
 		</cover-view>
 		<cover-view class="mapLeft">
-			<cover-view class="mapLeft_list">
+			<cover-view class="mapLeft_list" @click="searchcar">
 				<cover-image src="../static/images/map/car.png"></cover-image>
-				<cover-view>寻车</cover-view>
+				<cover-view >寻车</cover-view>
 			</cover-view>
-			<cover-view class="mapLeft_list">
+			<cover-view class="mapLeft_list" @click="payfortip">
 				<cover-image src="../static/images/map/pay.png" style="width: 19.5px; height: 20.5px; margin-left: 12px;"></cover-image>
-				<cover-view>缴费</cover-view>
+				<cover-view @click="payfortip">缴费</cover-view>
 			</cover-view>
-			<cover-view class="mapLeft_list">
+			<cover-view class="mapLeft_list" @click="order">
 				<cover-image src="../static/images/map/order.png" style="width: 19px; height: 22px; margin-left: 13px;
 "></cover-image>
 				<cover-view>订单</cover-view>
 			</cover-view>
-			<cover-view class="mapLeft_list">
+			<cover-view class="mapLeft_list" @click="bind">
 				<cover-image src="../static/images/map/bind.png" style="width: 22px; height: 17px; margin-left: 11px;"></cover-image>
 				<cover-view>绑定</cover-view>
 			</cover-view>
@@ -47,7 +47,7 @@
 					</cover-view>
 				</cover-view>
 			</cover-view>
-			<cover-view class="mapBottom_right">
+			<cover-view class="mapBottom_right" >
 				<cover-view class="mapBottom_right_list">
 					<cover-image src="../static/images/map/naviget.png" style="margin-left:2px;height: 12.5px; float:left;width: 12.5px;"></cover-image>
 					<cover-view style="float:left;height: 14px;color: #4483FD; margin-left: 6px; line-height: 14px; font-size: 11px;">{{distance}}千米</cover-view>
@@ -62,6 +62,8 @@
 			</cover-view>
 		</cover-view>
 		<mapPopup ref="popup" class="popup" style="z-index:0"></mapPopup>
+		<tipsinfo @getval="getval" ref="info" class="tipsinfo" :style="{'z-index':isshowinfo?1002:1}"></tipsinfo>
+
 	</div>
 	
 </template>
@@ -69,17 +71,19 @@
 <script>
 	import makerData from '../static/jsData/map.js'
 	import mapPopup from './mapPopup.nvue'
+	import tipsinfo from './tipsInfo.nvue'
 	export default {
 		name:"mapIndex",
 		components:{
-			mapPopup
+			mapPopup,
+			tipsinfo,
 		},
 		props:{
 			latitude:{
 				type:String,
 				default:""
 			},
-			longitude:{
+			longitude:{ 
 				type:String,
 				default:""
 			}
@@ -101,6 +105,7 @@
 				lat:0,
 				long:0,
 				show:false,
+				isshowinfo:false,
 				EARTH_RADIUS:6378.137//地球半径
 			}
 		},
@@ -113,7 +118,11 @@
 			this.circles = makerData.circles;
 		},
 		onLoad() {
-			
+			var _self=this;
+			uni.$on('infoshow1',function(data){
+				console.log(data.msg)
+				_self.isshowinfo = data.msg==0?false:true;
+			})
 		},
 		onShow() {
 			
@@ -121,6 +130,9 @@
 		methods: {
 			rad(d){
 			    return d * Math.PI / 180.0;
+			},
+			getval(value){
+				this.isshowinfo = false;
 			},
 			changeview(){
 				var map = uni.createMapContext('map', this)
@@ -143,8 +155,8 @@
 				           radius= _self.getDistance(lng1,lat1,lng2,lat1)*1000/2*0.8;
 				       }
 					   
-					   _self.circles[0].radius = radius;
-					   _self.circles[0].strokeWidth = radius;
+					   _self.circles[0].radius = radius>=100?100:radius;
+					   _self.circles[0].strokeWidth =  radius>=100?60:radius;
 				   },
 				   fail: (data, code) => {  
 					   console.log('fail' + JSON.stringify(data));  
@@ -223,6 +235,30 @@
 				// 	clearTimeout(timeid);
 				// }
 				// this.ismarkertap = 1;
+
+			},
+			searchcar:function(){
+				this.isshowinfo = true;
+				console.log(111)
+				this.$refs.info.show();
+			},
+			payfortip:function(){
+				
+				uni.navigateTo({
+					url:'/pages/payfortips/payfortips',
+				});
+			},
+			order:function(){
+				
+				uni.navigateTo({
+					url:"/pages/orderList/order",
+				});
+			},
+			bind:function(){
+				
+				uni.navigateTo({
+					url:"/pages/carNumbind/carNumBind",
+				});
 			}
 		}
 	}
@@ -374,6 +410,7 @@
 		font-size: 14px;
 		line-height: 37px;
 		text-align: center;
+		
 	}
 	.mapBottom_right_list{
 		height: 14px;
@@ -386,5 +423,13 @@
 		position: absolute;
 		top: 0;
 		left: 0;
+	}
+	.tipsinfo{
+		height: 100%;
+		width: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		
 	}
 </style>

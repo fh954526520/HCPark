@@ -6,29 +6,32 @@
 				<view class="carinput-input-i" :class="{'input-active':carIndex == i}" @click="inputKey" :data-index="i" v-for="(v,i) in carInput" :key="i" v-show="i < 7">
 					<text>{{carInput[i].val}}</text>
 				</view>
-				<view class="carinput-input-i" :class="{'input-active':carIndex == 7}" @click="inputKey" data-index="7">
-					<text>{{carInput[7].val?carInput[7].val:'+'}}</text>
+				<view class="carinput-input-i"style="border:1px solid #2DD661;"  :class="{'input-active':carIndex == 7}" @click="inputKey" data-index="7">
+					<view style="width:72upx;border-radius: 10rpx;background-color:#2DD661;height: 25upx; position: absolute;top: 29vh;border-radius: 11rpx;display: flex; align-items: center;justify-content: center;">
+						<view style="color: #FFFFFF;width: ;font-size: 18rpx;">
+							<text>新能源</text>
+						</view>
+					</view>
+					<text>{{isPower ? '':'+'}}{{carInput[7].val?carInput[7].val:''}}</text>
 				</view>
 			</view>
-			<view class="carinput-power">
-				<checkbox-group class="checkbox-g" @change="powerChange">
+			<view class="carinput-power" style="isplay: flex; flex-direction: row;align-items: center;justify-content: center;position: absolute;top: 40vh;left: 235rpx; color: #999999;">
+			   <!-- <checkbox-group class="checkbox-g" @change="powerChange">
 					<label class="checkbox">
 						<checkbox value="true" :checked="isPower" />
 						新能源
 					</label>
-				</checkbox-group>
+				</checkbox-group> -->
+				<text>切换为新能源车牌</text>
+				<switch style="transform: scale(0.8);" :checked="isPower" @change="powerChange" />
 			</view>
 		</view>
-		<view class="card-btn">
-			<button class="btn" hover-class="hover-c" type="default" @click="toBind">
-				确定
-			</button>
-		</view>
+		
 		<tki-float-keyboard ref="keybd" :mode="'car'" :type="keyType" :title="'特殊车牌'" @del="keyCbDel" @val="keyCbVal" @hide="keyCbHide"></tki-float-keyboard>
 	</view>
 </template>
 <script>
-import tkiFloatKeyboard from "@/pages/carNumbind/carNum/tki-float-keyboard/tki-float-keyboard.vue";
+import tkiFloatKeyboard from "@/Components/carNum/tki-float-keyboard/tki-float-keyboard.vue";
 export default {
 	data() {
 		return {
@@ -95,15 +98,18 @@ export default {
 					// 不是新能源出输入结束
 					that.keyHide();
 					that.carIndex = -2;
-					console.log('非新能源车输入完毕')
+					console.log('非新能源车输入完毕');
+					that.$emit('getCarInput',that.carInput);
 				}
 			} else if (index == 7) {
 				// 新能源车输入完毕
 				that.carInput[index].val = e;
 				that.keyHide();
 				that.carIndex = -3;
-				console.log('新能源车输入完毕')
+				console.log('新能源车输入完毕');
+				that.$emit('getCarInput',that.carInput);
 			}
+
 			that.upKeyType();
 		},
 		keyCbDel(e) {
@@ -136,18 +142,18 @@ export default {
 			}
 		},
 		powerChange(e) {
-			let that = this
-			let i = that.checkCar().i
-			if (e.detail.value.length > 0) {
-				that.isPower = true;
+			let that = this;
+			console.log("aaaa");
+			let i = that.checkCar().i;
+			that.isPower =!that.isPower;
+			if (that.isPower===true) {
 				if (i == -1) {
 					that.carIndex = 7;
 				} else {
 					that.carIndex = i;
 				}
 				that.keyShow();
-			} else {
-				that.isPower = false;
+			}else {
 				that.carInput[7].val = "";
 				if (that.carIndex == 7) {
 					that.keyHide();
@@ -176,18 +182,36 @@ export default {
 			}
 			return rt;
 		},
-		toBind() {
+		toBind(val) {
 			let that = this
 			let ck = that.checkCar();
 			if (ck.i == -1 && !ck.isempty) {
 				console.log('可以绑定车牌了');
-				console.log(this.carInput)
+				console.log(this.carInput);
+				console.log(val);
+				uni.navigateTo({
+					url:"../../pages/payDetails/paydetails?info="+JSON.stringify(val),
+				});
 			} else {
 				// 显示键盘输入
+				uni.showToast({
+					title:"！请重新输入",
+					duration:1000,
+				});
 				that.keyShow();
 				that.carIndex = ck.i;
 				that.keyType = that.carInput[ck.i].type
 			}
+		},
+		getdefaultcarInput:function(value){
+			if(value.length>7){
+				this.powerChange(value);
+			}
+			for(let i=0;i<this.carInput.length;i++){
+				this.carInput[i].val=value[i];
+			}
+			this.$emit('getCarInput',this.carInput);
+			console.log(this.carInput);
 		}
 	},
 	components: {
@@ -221,4 +245,5 @@ export default {
 
 <style>
 @import "./style.css";
+
 </style>

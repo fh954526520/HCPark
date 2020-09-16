@@ -11,7 +11,7 @@
 	
 
 <script>
-	import numbers from "@/pages/carNumbind/carNum/index.vue"
+	import numbers from "@/Components/carNum/index.vue"
 	export default {
 		data(){
 			return{
