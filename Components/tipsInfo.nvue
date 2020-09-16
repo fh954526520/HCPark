@@ -10,7 +10,7 @@
 				<cover-view style="margin-top: 32rpx;">车位号：{{parkinglotnumber}}</cover-view>
 			</cover-view>
 			<cover-view class="plate-number">
-				<cover-view :key="index" :style="{'background-color':index==7 ? '#E4FFEA':'','border-color':index==7 ? '#7BC623':'','text-align':'center','line-height':'8vw'}" class="plate-items" v-for="(item,index) in 8">
+				<cover-view :key="index" v-show="index!=7||newpow==true" :style="{'background-color':index==7 ? '#E4FFEA':'','border-color':index==7 ? '#7BC623':'','text-align':'center','line-height':'8vw'}" class="plate-items" v-for="(item,index) in 8">
 					    {{platenumber[index]}}
 				</cover-view>
 			</cover-view>
@@ -36,8 +36,9 @@
 			return{
 				address:"万禾街",
 				parkinglotnumber:"0015",
-				platenumber:"渝AVM4169",
-				isshow:false
+				platenumber:"渝AVM416",
+				isshow:false,
+				newpow:true,
 			}
 		},
 		methods:{
@@ -53,7 +54,13 @@
 				console.log(2222)
 				this.isshow = false;
 				this.$emit('getval',"absysahshadsa");
+			},
+		},
+		created() {
+			if(this.platenumber.length<8||this.platenumber[7]==undefined){
+				this.newpow=false;
 			}
+			console.log(this.newpow);
 		}
 	}
 </script>
