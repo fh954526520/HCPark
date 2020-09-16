@@ -95,6 +95,16 @@
 			},
 			confirm:function(){
 				console.log("点击了确认按钮");
+				uni.showToast({
+					title:"输入成功",
+					duration:1500,
+				});
+				setTimeout(function(){
+					uni.navigateTo({
+						url: '../index/index',
+						success: res => {console.log(res)},
+					});
+				},1500);
 			}
 			
 		},

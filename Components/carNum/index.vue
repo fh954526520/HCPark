@@ -198,6 +198,15 @@ export default {
 			if (ck.i == -1 && !ck.isempty) {
 				console.log('可以绑定车牌了');
 				console.log(this.platNumber);
+				uni.showToast({
+					title:"绑定车牌",
+					duration:1500
+				});
+				setTimeout(function(){
+					uni.navigateTo({
+						url:"../../pages/index/index"
+					});
+				},1500)
 			} else {
 				uni.showToast({
 					title:"！请重新输入",
