@@ -80,7 +80,7 @@ export default {
 				if (!that.isPower) {
 					return false;
 				} else {
-					that.carIndex = 7;
+					that.carIndex = 7; 
 				}
 			} else {
 				that.carIndex = data.index;
